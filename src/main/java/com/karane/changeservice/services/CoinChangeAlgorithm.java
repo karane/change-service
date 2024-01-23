@@ -43,21 +43,6 @@ public class CoinChangeAlgorithm {
         return changeDto;
     }
 
-    private List<Integer> extractSelectedCoins(int[] coins, int[] selectedCoins, int amount) {
-        if (coins.length == 0) {
-            return Collections.emptyList();
-        }
-
-        ArrayList<Integer> coinsList = new ArrayList<>();
-        while (amount > 0) {
-            int coin = selectedCoins[amount];
-            coinsList.add(coin);
-            amount -= coin;
-        }
-
-        return coinsList;
-    }
-
     class CoinsResult {
         public int coinsQuantity;
         public List<Integer> selectedCoins;
@@ -138,11 +123,10 @@ public class CoinChangeAlgorithm {
         }
 
         CoinsResult coinsResult = new CoinsResult(res, selectedCoins, minCoinSupply);
-        coinsResult.coinSupply = coinSupply;
 
         if (coinsResult.getSumCoins() != amount) {
-            coinsResult = new CoinsResult(0, new ArrayList<Integer>(), coinSupply);
-
+            int[] coinSupplyCopy = Arrays.copyOf(minCoinSupply, minCoinSupply.length);
+            coinsResult = new CoinsResult(0, new ArrayList<Integer>(), coinSupplyCopy);
         }
 
         memo.put(amount, coinsResult);
@@ -190,7 +174,8 @@ public class CoinChangeAlgorithm {
 
         CoinsResult coinsResult = new CoinsResult(res, selectedCoins, maxCoinSupply);
         if (coinsResult.getSumCoins() != amount) {
-            coinsResult = new CoinsResult(0, new ArrayList<Integer>(), coinSupply);
+            int[] coinSupplyCopy = Arrays.copyOf(maxCoinSupply, maxCoinSupply.length);
+            coinsResult = new CoinsResult(0, new ArrayList<Integer>(), coinSupplyCopy);
 
         }
 

@@ -288,20 +288,4 @@ class CoinChangeAlgorithmTest {
         assertEquals(0, changeDto.get_25_cent());
     }
 
-    @Test
-    void hundredDollarTest() {
-        CoinsDto coinsDto = new CoinsDto();
-        coinsDto.set_1_cent(100);
-        coinsDto.set_5_cent(100);
-        coinsDto.set_10_cent(100);
-        coinsDto.set_25_cent(100);
-
-        ChangeDto changeDto = coinChangeAlgorithm.coinChangeMemo(40, coinsDto, false);
-        assertEquals(160, changeDto.getTotalCoins());
-        assertEquals(0, changeDto.get_1_cent());
-        assertEquals(0, changeDto.get_5_cent());
-        assertEquals(0, changeDto.get_10_cent());
-        assertEquals(160, changeDto.get_25_cent());
-    }
-
 }

@@ -32,12 +32,17 @@ public class CoinChangeService {
         ChangeDto changeDto = coinChangeAlgorithm.coinChangeMemo(bill, coinsDto, maximizeCoins);
         changeDto.setBill(bill);
 
-        updateCoinsRepository(coinsEntity, changeDto);
+
+        if (changeDto.getTotalCoins() > 0) {
+            updateCoinsRepository(coinsEntity, changeDto);
+        }
 
         return changeDto;
     }
 
     private void updateCoinsRepository(CoinsEntity coinsEntity, ChangeDto changeDto) {
+
+
         coinsEntity.set_1_cent(coinsEntity.get_1_cent() - changeDto.get_1_cent());
         coinsEntity.set_5_cent(coinsEntity.get_5_cent() - changeDto.get_5_cent());
         coinsEntity.set_10_cent(coinsEntity.get_10_cent() - changeDto.get_10_cent());
@@ -45,7 +50,6 @@ public class CoinChangeService {
         coinsEntity.setTotalCoins(coinsEntity.get_1_cent() + coinsEntity.get_5_cent() + coinsEntity.get_10_cent() + coinsEntity.get_25_cent());
 
         coinsRepository.updateCoins(coinsEntity);
-        System.out.println(coinsRepository.getCoins());
     }
 
 }

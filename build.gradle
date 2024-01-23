@@ -11,16 +11,6 @@ java {
 	sourceCompatibility = '17'
 }
 
-//application {
-//	mainClassName = 'com.karane.changeservice.ChangeserviceApplication'
-//	// Set JVM options
-//	applicationDefaultJvmArgs = ["-Xss4m"]
-//}
-
-//tasks.withType(JavaExec) {
-//	jvmArgs = ['-Xms512m', '-Xmx512m', '-Xss512m']
-//}
-
 repositories {
 	mavenCentral()
 }
@@ -29,6 +19,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
+	implementation 'org.springframework.boot:spring-boot-starter-logging'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.mockito:mockito-core:3.12.4'

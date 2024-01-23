@@ -1,7 +1,5 @@
 package com.karane.changeservice.services.dtos;
 
-import java.util.StringJoiner;
-
 public class CoinsDto {
     private int _1_cent;
     private int _5_cent;

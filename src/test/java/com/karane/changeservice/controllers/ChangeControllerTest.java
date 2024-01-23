@@ -41,7 +41,7 @@ class ChangeControllerTest {
                 .thenReturn(new ChangeDto(0, 1, 0, 0, 0, 0));
         when(changeResponseMapper.toChangeResponse(any(ChangeDto.class)))
                 .thenReturn(new ChangeResponse(0, 1, 0, 0, 0, 0));
-        when(billValidator.isValid(anyInt())).thenReturn(true);
+        when(billValidator.isNotValid(anyInt())).thenReturn(false);
 
         int bill = 1;
 
@@ -58,16 +58,15 @@ class ChangeControllerTest {
     // Test success case
     @Test
     public void testChangeEndpoint() throws Exception {
+        int bill = 1;
 
         ChangeResponse expectedResponse = new ChangeResponse(100, 1, 100, 0, 0, 0);
-        when(coinChangeService.coinChange(eq(1), anyBoolean()))
+        when(coinChangeService.coinChange(eq(bill), anyBoolean()))
                 .thenReturn(new ChangeDto(100, 1, 100, 0, 0, 0));
         when(changeResponseMapper.toChangeResponse(any(ChangeDto.class)))
                 .thenReturn(expectedResponse);
-        when(billValidator.isValid(anyInt())).thenReturn(true);
+        when(billValidator.isNotValid(anyInt())).thenReturn(false);
 
-
-        int bill = 1;
 
         String expectedString = expectedResponse.toJsonString();
 
@@ -79,16 +78,14 @@ class ChangeControllerTest {
 
     @Test
     public void testChangeEndpointInvalidInput() throws Exception {
+        int bill = 3;
 
         ChangeResponse expectedResponse = new ChangeResponse(100, 1, 100, 0, 0, 0);
-        when(coinChangeService.coinChange(eq(1), anyBoolean()))
+        when(coinChangeService.coinChange(eq(bill), anyBoolean()))
                 .thenReturn(new ChangeDto(100, 1, 100, 0, 0, 0));
         when(changeResponseMapper.toChangeResponse(any(ChangeDto.class)))
                 .thenReturn(expectedResponse);
-        when(billValidator.isValid(anyInt())).thenReturn(false);
-
-
-        int bill = 3;
+        when(billValidator.isNotValid(anyInt())).thenReturn(true);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/change/{bill}", bill)
                         .contentType(MediaType.APPLICATION_JSON))
