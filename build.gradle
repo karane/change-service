@@ -1,0 +1,39 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.2'
+	id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.karane'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+//application {
+//	mainClassName = 'com.karane.changeservice.ChangeserviceApplication'
+//	// Set JVM options
+//	applicationDefaultJvmArgs = ["-Xss4m"]
+//}
+
+//tasks.withType(JavaExec) {
+//	jvmArgs = ['-Xms512m', '-Xmx512m', '-Xss512m']
+//}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.mockito:mockito-core:3.12.4'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
