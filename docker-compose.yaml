@@ -8,7 +8,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - COIN_ONE_CENT=100
-      - COIN_FIVE_CENTS=100
-      - COIN_TEN_CENTS=100
-      - COIN_TWENTY_FIVE_CENTS=100
+      - COIN_ONE_CENT=1000
+      - COIN_FIVE_CENTS=1000
+      - COIN_TEN_CENTS=1000
+      - COIN_TWENTY_FIVE_CENTS=1000

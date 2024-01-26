@@ -2,7 +2,6 @@ package com.karane.changeservice.services;
 
 import com.karane.changeservice.services.dtos.ChangeDto;
 import com.karane.changeservice.services.dtos.CoinsDto;
-
 import java.util.*;
 
 public class CoinChangeAlgorithm {
@@ -12,6 +11,11 @@ public class CoinChangeAlgorithm {
     public static final int TEN_CENTS_ITEM = 10;
     public static final int TWENTY_FIVE_CENTS_ITEM = 25;
     public static final int MULTIPLIER_FACTOR = 100;
+
+    public static final int ONE_CENT_INDEX = 0;
+    public static final int FIVE_CENTS_INDEX = 1;
+    public static final int TEN_CENTS_INDEX = 2;
+    public static final int TWENTY_CENTS_INDEX = 3;
 
 
     private int [] buildCoinSupply(CoinsDto coinsDto) {
@@ -25,163 +29,104 @@ public class CoinChangeAlgorithm {
         return coinSupply;
     }
 
-    private ChangeDto countSelectedCoins(List<Integer> selectedCoins) {
+    private ChangeDto countSelectedCoins(int[] selectedCoinsCounts) {
         ChangeDto changeDto = new ChangeDto();
-
-        for(int coin: selectedCoins) {
-            if(coin == ONE_CENT_ITEM) {
-                changeDto.set_1_cent(changeDto.get_1_cent() + 1);
-            } else if(coin == FIVE_CENTS_ITEM) {
-                changeDto.set_5_cent(changeDto.get_5_cent() + 1);
-            } else if(coin == TEN_CENTS_ITEM) {
-                changeDto.set_10_cent(changeDto.get_10_cent() + 1);
-            } else if(coin == TWENTY_FIVE_CENTS_ITEM) {
-                changeDto.set_25_cent(changeDto.get_25_cent() + 1);
-            }
+        if (selectedCoinsCounts == null) {
+            return changeDto;
         }
+
+        changeDto.set_1_cent(selectedCoinsCounts[ONE_CENT_INDEX]);
+        changeDto.set_5_cent(selectedCoinsCounts[FIVE_CENTS_INDEX]);
+        changeDto.set_10_cent(selectedCoinsCounts[TEN_CENTS_INDEX]);
+        changeDto.set_25_cent(selectedCoinsCounts[TWENTY_CENTS_INDEX]);
+
+        changeDto.setTotalCoins(
+                changeDto.get_1_cent()
+                + changeDto.get_5_cent()
+                + changeDto.get_10_cent()
+                + changeDto.get_25_cent()
+        );
 
         return changeDto;
     }
 
-    class CoinsResult {
-        public int coinsQuantity;
-        public List<Integer> selectedCoins;
-        public int[] coinSupply;
 
-        public CoinsResult(int coinsQuantity, List<Integer> selectedCoins, int[] coinSupply) {
-            this.coinsQuantity = coinsQuantity;
-            this.selectedCoins = selectedCoins;
-            this.coinSupply = coinSupply;
-        }
-
-        public int getSumCoins() {
-            return selectedCoins.stream().mapToInt(Integer::intValue).sum();
-        }
+    public ChangeDto coinChangeDP(int amount, CoinsDto coinsDto, boolean maximizeCoins) {
+        return coinChangeDP(amount, coinsDto, maximizeCoins, MULTIPLIER_FACTOR);
     }
-
-    Hashtable<Integer, CoinsResult> memo;
-
-    public ChangeDto coinChangeMemo(int amount, CoinsDto coinsDto, boolean maximizeCoins) {
-        return coinChangeMemo(amount, coinsDto, maximizeCoins, MULTIPLIER_FACTOR);
-    }
-    public ChangeDto coinChangeMemo(int amount, CoinsDto coinsDto, boolean maximizeCoins, int factor) {
-        int [] coins = {ONE_CENT_ITEM, FIVE_CENTS_ITEM, TEN_CENTS_ITEM, TWENTY_FIVE_CENTS_ITEM};
+    public ChangeDto coinChangeDP(int amount, CoinsDto coinsDto, boolean maximizeCoins, int factor) {
+        int[] coins = {ONE_CENT_ITEM, FIVE_CENTS_ITEM, TEN_CENTS_ITEM, TWENTY_FIVE_CENTS_ITEM};
         int[] coinSupply = buildCoinSupply(coinsDto);
 
         int convertedAmount = amount * factor;
 
-        memo = new Hashtable<>();
-        CoinsResult changeCoinsResult;
+        int [] selectedCoinsCounts;
         if (maximizeCoins) {
-            changeCoinsResult = maxCoinsMemo(coins, coinSupply, convertedAmount);
+            selectedCoinsCounts = maxCoinsDP(coins, coinSupply, convertedAmount);
         } else {
-            changeCoinsResult = minCoinsMemo(coins, coinSupply, convertedAmount);
+            selectedCoinsCounts = minCoinsDP(coins, coinSupply, convertedAmount);
         }
 
-        ChangeDto changeDto = countSelectedCoins(changeCoinsResult.selectedCoins);
-        changeDto.setTotalCoins(changeCoinsResult.coinsQuantity);
-
-        return changeDto;
+        return countSelectedCoins(selectedCoinsCounts);
     }
-    private CoinsResult minCoinsMemo(int [] coins, int[] coinSupply, int amount)
-    {
-        // base case
-        if (amount == 0) {
-            int [] coinSupplyCopy = Arrays.copyOf(coinSupply, coinSupply.length);
-            return new CoinsResult(0, new ArrayList<Integer>(), coinSupplyCopy);
-        }
+    private int[] minCoinsDP(int [] coins, int[] coinCounts, int amount) {
+        int[] dp = new int[amount + 1];
+        int[][] selectedCoins = new int[amount + 1][coins.length]; // Track selected coins
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[0] = 0;
 
-        if (memo.containsKey(amount)) {
-            return memo.get(amount);
-        }
+        for (int w = 1; w <= amount; w++) {
+            for (int j = 0; j < coins.length; j++) {
+                int coin = coins[j];
+                int coinCount = coinCounts[j];
 
-        // Initialize result
-        int res = Integer.MAX_VALUE;
-
-        // Try every coin that has smaller value than V
-        List<Integer> selectedCoins = new ArrayList<Integer>();
-        int [] minCoinSupply = Arrays.copyOf(coinSupply, coinSupply.length);
-        for (int i=0; i< coins.length; i++)
-        {
-            if (coins[i] <= amount)
-            {
-                int[] coinSupplyCopy = Arrays.copyOf(minCoinSupply, minCoinSupply.length);
-                CoinsResult subRes = minCoinsMemo(coins, coinSupplyCopy, amount - coins[i]);
-
-                if (subRes.coinsQuantity != Integer.MAX_VALUE
-                        && (subRes.coinSupply[i] > 0)
-                        && subRes.coinsQuantity < res) {
-                    res = subRes.coinsQuantity + 1;
-
-                    selectedCoins = new ArrayList<>(subRes.selectedCoins);
-                    selectedCoins.add(coins[i]);
-
-                    minCoinSupply = Arrays.copyOf(subRes.coinSupply, subRes.coinSupply.length);
-                    minCoinSupply[i]--;
+                for (int k = 1; k <= coinCount && coin * k <= w; k++) {
+                    if (dp[w - coin * k] != Integer.MAX_VALUE
+                            && selectedCoins[w - coin * k][j] + k <= coinCount
+                            && dp[w - coin * k] + k < dp[w]) {
+                        dp[w] = dp[w - coin * k] + k;
+                        System.arraycopy(selectedCoins[w - coin * k], 0, selectedCoins[w], 0, coins.length);
+                        selectedCoins[w][j] += k;
+                    }
                 }
             }
         }
 
-        CoinsResult coinsResult = new CoinsResult(res, selectedCoins, minCoinSupply);
-
-        if (coinsResult.getSumCoins() != amount) {
-            int[] coinSupplyCopy = Arrays.copyOf(minCoinSupply, minCoinSupply.length);
-            coinsResult = new CoinsResult(0, new ArrayList<Integer>(), coinSupplyCopy);
+        if (dp[amount] == Integer.MAX_VALUE) {
+            return null;
+        } else {
+            return selectedCoins[amount];
         }
-
-        memo.put(amount, coinsResult);
-        return coinsResult;
     }
 
-    private CoinsResult maxCoinsMemo(int [] coins, int [] coinSupply, int amount)
-    {
-        // base case
-        if (amount == 0) {
-            int[] coinSupplyCopy = Arrays.copyOf(coinSupply, coinSupply.length);
-            return new CoinsResult(0, new ArrayList<Integer>(), coinSupplyCopy);
-        }
+    private int [] maxCoinsDP(int [] coins, int[] coinCounts, int amount) {
+        int[] dp = new int[amount + 1];
+        int[][] selectedCoins = new int[amount + 1][coins.length]; // Track selected coins
+        Arrays.fill(dp, -1);
+        dp[0] = 0;
 
-        if (memo.containsKey(amount)) {
-            return memo.get(amount);
-        }
+        for (int w = 1; w <= amount; w++) {
+            for (int coinIndex = 0; coinIndex < coins.length; coinIndex++) {
+                int coin = coins[coinIndex];
+                int coinCount = coinCounts[coinIndex];
 
-        // Initialize result
-        int res = 0;
-
-        // Try every coin that has smaller value than V
-        List<Integer> selectedCoins = new ArrayList<Integer>();
-        int [] maxCoinSupply = Arrays.copyOf(coinSupply, coinSupply.length);
-        for (int i=0; i<coins.length; i++)
-        {
-            if (coins[i] <= amount)
-            {
-                int[] coinSupplyCopy = Arrays.copyOf(maxCoinSupply, maxCoinSupply.length);
-                CoinsResult subRes = maxCoinsMemo(coins, coinSupplyCopy, amount - coins[i]);
-
-                if (subRes.coinsQuantity != Integer.MAX_VALUE
-                        && (subRes.coinSupply[i] > 0)
-                        && subRes.coinsQuantity + 1 > res) {
-                    res = subRes.coinsQuantity + 1;
-
-                    selectedCoins = new ArrayList<>(subRes.selectedCoins);
-                    selectedCoins.add(coins[i]);
-
-                    maxCoinSupply = Arrays.copyOf(subRes.coinSupply, subRes.coinSupply.length);
-                    maxCoinSupply[i]--;
+                for (int k = 1; k <= coinCount && coin * k <= w; k++) {
+                    if (dp[w - coin * k] != -1
+                            && selectedCoins[w - coin * k][coinIndex] + k <= coinCount
+                            && dp[w - coin * k] + k > dp[w]) {
+                        dp[w] = dp[w - coin * k] + k;
+                        System.arraycopy(selectedCoins[w - coin * k], 0, selectedCoins[w], 0, coins.length);
+                        selectedCoins[w][coinIndex] += k;
+                    }
                 }
             }
         }
 
-        CoinsResult coinsResult = new CoinsResult(res, selectedCoins, maxCoinSupply);
-        if (coinsResult.getSumCoins() != amount) {
-            int[] coinSupplyCopy = Arrays.copyOf(maxCoinSupply, maxCoinSupply.length);
-            coinsResult = new CoinsResult(0, new ArrayList<Integer>(), coinSupplyCopy);
-
+        if (dp[amount] == -1) {
+            return null;
+        } else {
+            return selectedCoins[amount];
         }
-
-        memo.put(amount, coinsResult);
-        return coinsResult;
     }
-
 }
 

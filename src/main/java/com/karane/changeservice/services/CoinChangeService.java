@@ -29,7 +29,7 @@ public class CoinChangeService {
         CoinsEntity coinsEntity = coinsRepository.getCoins();
         CoinsDto coinsDto = coinsDtoMapper.mapFromCoinsEntity(coinsEntity);
 
-        ChangeDto changeDto = coinChangeAlgorithm.coinChangeMemo(bill, coinsDto, maximizeCoins);
+        ChangeDto changeDto = coinChangeAlgorithm.coinChangeDP(bill, coinsDto, maximizeCoins);
         changeDto.setBill(bill);
 
 
