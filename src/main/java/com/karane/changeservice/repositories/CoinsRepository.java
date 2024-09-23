@@ -18,12 +18,12 @@ public class CoinsRepository {
     @Autowired
     public CoinsRepository(Environment env) {
         coins = new CoinsEntity();
-        coins.set_1_cent(env.getProperty("COIN_ONE_CENT", Integer.class, DEFAULT_COINS_QUANTITY));
-        coins.set_5_cent(env.getProperty("COIN_FIVE_CENTS", Integer.class, DEFAULT_COINS_QUANTITY));
-        coins.set_10_cent(env.getProperty("COIN_TEN_CENTS", Integer.class, DEFAULT_COINS_QUANTITY));
-        coins.set_25_cent(env.getProperty("COIN_TWENTY_FIVE_CENTS", Integer.class, DEFAULT_COINS_QUANTITY));
+        coins.setOneCent(env.getProperty("COIN_ONE_CENT", Integer.class, DEFAULT_COINS_QUANTITY));
+        coins.setFiveCents(env.getProperty("COIN_FIVE_CENTS", Integer.class, DEFAULT_COINS_QUANTITY));
+        coins.setTenCents(env.getProperty("COIN_TEN_CENTS", Integer.class, DEFAULT_COINS_QUANTITY));
+        coins.setTwentyFiveCents(env.getProperty("COIN_TWENTY_FIVE_CENTS", Integer.class, DEFAULT_COINS_QUANTITY));
 
-        coins.setTotalCoins(coins.get_1_cent() + coins.get_5_cent() + coins.get_10_cent() + coins.get_25_cent());
+        coins.setTotalCoins(coins.getOneCent() + coins.getFiveCents() + coins.getTenCents() + coins.getTwentyFiveCents());
 
         logger.info("Started as:" + coins);
     }
@@ -31,22 +31,22 @@ public class CoinsRepository {
     public CoinsEntity getCoins()
     {
         CoinsEntity coinsEntity = new CoinsEntity();
-        coinsEntity.set_1_cent(coins.get_1_cent());
-        coinsEntity.set_5_cent(coins.get_5_cent());
-        coinsEntity.set_10_cent(coins.get_10_cent());
-        coinsEntity.set_25_cent(coins.get_25_cent());
+        coinsEntity.setOneCent(coins.getOneCent());
+        coinsEntity.setFiveCents(coins.getFiveCents());
+        coinsEntity.setTenCents(coins.getTenCents());
+        coinsEntity.setTwentyFiveCents(coins.getTwentyFiveCents());
         coinsEntity.setTotalCoins(coins.getTotalCoins());
 
         return coinsEntity;
     }
 
     public void updateCoins(CoinsEntity coinsEntity) {
-        coins.set_1_cent(coinsEntity.get_1_cent());
-        coins.set_5_cent(coinsEntity.get_5_cent());
-        coins.set_10_cent(coinsEntity.get_10_cent());
-        coins.set_25_cent(coinsEntity.get_25_cent());
+        coins.setOneCent(coinsEntity.getOneCent());
+        coins.setFiveCents(coinsEntity.getFiveCents());
+        coins.setTenCents(coinsEntity.getTenCents());
+        coins.setTwentyFiveCents(coinsEntity.getTwentyFiveCents());
 
-        coins.setTotalCoins(coins.get_1_cent() + coins.get_5_cent() + coins.get_10_cent() + coins.get_25_cent());
+        coins.setTotalCoins(coins.getOneCent() + coins.getFiveCents() + coins.getTenCents() + coins.getTwentyFiveCents());
 
         logger.info("Updated to:" + coins);
     }

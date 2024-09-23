@@ -42,10 +42,10 @@ class CoinChangeServiceTest {
 
         assertEquals(1, result.getBill());
         assertEquals(4, result.getTotalCoins());
-        assertEquals(0, result.get_1_cent());
-        assertEquals(0, result.get_5_cent());
-        assertEquals(0, result.get_10_cent());
-        assertEquals(4, result.get_25_cent());
+        assertEquals(0, result.getOneCent());
+        assertEquals(0, result.getFiveCents());
+        assertEquals(0, result.getTenCents());
+        assertEquals(4, result.getTwentyFiveCents());
     }
 
     @Test
@@ -56,10 +56,10 @@ class CoinChangeServiceTest {
 
         assertEquals(1, result.getBill());
         assertEquals(100, result.getTotalCoins());
-        assertEquals(100, result.get_1_cent());
-        assertEquals(0, result.get_5_cent());
-        assertEquals(0, result.get_10_cent());
-        assertEquals(0, result.get_25_cent());
+        assertEquals(100, result.getOneCent());
+        assertEquals(0, result.getFiveCents());
+        assertEquals(0, result.getTenCents());
+        assertEquals(0, result.getTwentyFiveCents());
     }
 
     @Test
@@ -70,10 +70,10 @@ class CoinChangeServiceTest {
 
         assertEquals(1, result.getBill());
         assertEquals(0, result.getTotalCoins());
-        assertEquals(0, result.get_1_cent());
-        assertEquals(0, result.get_5_cent());
-        assertEquals(0, result.get_10_cent());
-        assertEquals(0, result.get_25_cent());
+        assertEquals(0, result.getOneCent());
+        assertEquals(0, result.getFiveCents());
+        assertEquals(0, result.getTenCents());
+        assertEquals(0, result.getTwentyFiveCents());
     }
 
     @Test
@@ -84,28 +84,28 @@ class CoinChangeServiceTest {
 
         assertEquals(1, result.getBill());
         assertEquals(100, result.getTotalCoins());
-        assertEquals(100, result.get_1_cent());
-        assertEquals(0, result.get_5_cent());
-        assertEquals(0, result.get_10_cent());
-        assertEquals(0, result.get_25_cent());
+        assertEquals(100, result.getOneCent());
+        assertEquals(0, result.getFiveCents());
+        assertEquals(0, result.getTenCents());
+        assertEquals(0, result.getTwentyFiveCents());
 
         result = coinChangeService.coinChange(1, true);
 
         assertEquals(1, result.getBill());
         assertEquals(0, result.getTotalCoins());
-        assertEquals(0, result.get_1_cent());
-        assertEquals(0, result.get_5_cent());
-        assertEquals(0, result.get_10_cent());
-        assertEquals(0, result.get_25_cent());
+        assertEquals(0, result.getOneCent());
+        assertEquals(0, result.getFiveCents());
+        assertEquals(0, result.getTenCents());
+        assertEquals(0, result.getTwentyFiveCents());
 
         result = coinChangeService.coinChange(1, true);
 
         assertEquals(1, result.getBill());
         assertEquals(0, result.getTotalCoins());
-        assertEquals(0, result.get_1_cent());
-        assertEquals(0, result.get_5_cent());
-        assertEquals(0, result.get_10_cent());
-        assertEquals(0, result.get_25_cent());
+        assertEquals(0, result.getOneCent());
+        assertEquals(0, result.getFiveCents());
+        assertEquals(0, result.getTenCents());
+        assertEquals(0, result.getTwentyFiveCents());
     }
 
     @Test
@@ -116,10 +116,10 @@ class CoinChangeServiceTest {
 
         assertEquals(1, result.getBill());
         assertEquals(0, result.getTotalCoins());
-        assertEquals(0, result.get_1_cent());
-        assertEquals(0, result.get_5_cent());
-        assertEquals(0, result.get_10_cent());
-        assertEquals(0, result.get_25_cent());
+        assertEquals(0, result.getOneCent());
+        assertEquals(0, result.getFiveCents());
+        assertEquals(0, result.getTenCents());
+        assertEquals(0, result.getTwentyFiveCents());
     }
 
 }

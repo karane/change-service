@@ -1,4 +1,4 @@
-package com.karane.changeservice.services;
+package com.karane.changeservice.algorithms;
 
 import com.karane.changeservice.services.dtos.ChangeDto;
 import com.karane.changeservice.services.dtos.CoinsDto;
@@ -7,24 +7,24 @@ import java.util.*;
 public class CoinChangeAlgorithm {
 
     private static final int ONE_CENT_ITEM = 1;
-    public static final int FIVE_CENTS_ITEM = 5;
-    public static final int TEN_CENTS_ITEM = 10;
-    public static final int TWENTY_FIVE_CENTS_ITEM = 25;
-    public static final int MULTIPLIER_FACTOR = 100;
+    private static final int FIVE_CENTS_ITEM = 5;
+    private static final int TEN_CENTS_ITEM = 10;
+    private static final int TWENTY_FIVE_CENTS_ITEM = 25;
+    private static final int MULTIPLIER_FACTOR = 100;
 
-    public static final int ONE_CENT_INDEX = 0;
-    public static final int FIVE_CENTS_INDEX = 1;
-    public static final int TEN_CENTS_INDEX = 2;
-    public static final int TWENTY_CENTS_INDEX = 3;
+    private static final int ONE_CENT_INDEX = 0;
+    private static final int FIVE_CENTS_INDEX = 1;
+    private static final int TEN_CENTS_INDEX = 2;
+    private static final int TWENTY_CENTS_INDEX = 3;
 
 
     private int [] buildCoinSupply(CoinsDto coinsDto) {
         int[] coinSupply = new int[4];
         Arrays.fill(coinSupply, 0);
-        coinSupply[0] = coinsDto.get_1_cent();
-        coinSupply[1] = coinsDto.get_5_cent();
-        coinSupply[2] = coinsDto.get_10_cent();
-        coinSupply[3] = coinsDto.get_25_cent();
+        coinSupply[0] = coinsDto.getOneCent();
+        coinSupply[1] = coinsDto.getFiveCents();
+        coinSupply[2] = coinsDto.getTenCents();
+        coinSupply[3] = coinsDto.getTwentyFiveCents();
 
         return coinSupply;
     }
@@ -35,25 +35,25 @@ public class CoinChangeAlgorithm {
             return changeDto;
         }
 
-        changeDto.set_1_cent(selectedCoinsCounts[ONE_CENT_INDEX]);
-        changeDto.set_5_cent(selectedCoinsCounts[FIVE_CENTS_INDEX]);
-        changeDto.set_10_cent(selectedCoinsCounts[TEN_CENTS_INDEX]);
-        changeDto.set_25_cent(selectedCoinsCounts[TWENTY_CENTS_INDEX]);
+        changeDto.setOneCent(selectedCoinsCounts[ONE_CENT_INDEX]);
+        changeDto.setFiveCents(selectedCoinsCounts[FIVE_CENTS_INDEX]);
+        changeDto.setTenCents(selectedCoinsCounts[TEN_CENTS_INDEX]);
+        changeDto.setTwentyFiveCents(selectedCoinsCounts[TWENTY_CENTS_INDEX]);
 
         changeDto.setTotalCoins(
-                changeDto.get_1_cent()
-                + changeDto.get_5_cent()
-                + changeDto.get_10_cent()
-                + changeDto.get_25_cent()
+                changeDto.getOneCent()
+                + changeDto.getFiveCents()
+                + changeDto.getTenCents()
+                + changeDto.getTwentyFiveCents()
         );
 
         return changeDto;
     }
 
-
     public ChangeDto coinChangeDP(int amount, CoinsDto coinsDto, boolean maximizeCoins) {
         return coinChangeDP(amount, coinsDto, maximizeCoins, MULTIPLIER_FACTOR);
     }
+
     public ChangeDto coinChangeDP(int amount, CoinsDto coinsDto, boolean maximizeCoins, int factor) {
         int[] coins = {ONE_CENT_ITEM, FIVE_CENTS_ITEM, TEN_CENTS_ITEM, TWENTY_FIVE_CENTS_ITEM};
         int[] coinSupply = buildCoinSupply(coinsDto);
@@ -69,6 +69,7 @@ public class CoinChangeAlgorithm {
 
         return countSelectedCoins(selectedCoinsCounts);
     }
+
     private int[] minCoinsDP(int [] coins, int[] coinCounts, int amount) {
         int[] dp = new int[amount + 1];
         int[][] selectedCoins = new int[amount + 1][coins.length]; // Track selected coins

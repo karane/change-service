@@ -11,10 +11,10 @@ public class ChangeResponseMapper {
 
         ChangeResponse  changeResponse = new ChangeResponse();
 
-        changeResponse.set_1_cent(changeDto.get_1_cent());
-        changeResponse.set_5_cent(changeDto.get_5_cent());
-        changeResponse.set_10_cent(changeDto.get_10_cent());
-        changeResponse.set_25_cent(changeDto.get_25_cent());
+        changeResponse.set_1_cent(changeDto.getOneCent());
+        changeResponse.set_5_cent(changeDto.getFiveCents());
+        changeResponse.set_10_cent(changeDto.getTenCents());
+        changeResponse.set_25_cent(changeDto.getTwentyFiveCents());
         changeResponse.setTotalCoins(changeDto.getTotalCoins());
 
         return changeResponse;

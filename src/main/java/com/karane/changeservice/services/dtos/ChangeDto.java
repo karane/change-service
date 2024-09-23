@@ -5,20 +5,20 @@ import java.util.StringJoiner;
 public class ChangeDto {
     private int totalCoins;
     private int bill;
-    private int _1_cent;
-    private int _5_cent;
-    private int _10_cent;
-    private int _25_cent;
+    private int oneCent;
+    private int fiveCents;
+    private int tenCents;
+    private int twentyFiveCents;
 
     public ChangeDto() {
     }
     public ChangeDto(int totalCoins, int bill, int _1_cent, int _5_cent, int _10_cent, int _25_cent) {
         this.totalCoins = totalCoins;
         this.bill = bill;
-        this._1_cent = _1_cent;
-        this._5_cent = _5_cent;
-        this._10_cent = _10_cent;
-        this._25_cent = _25_cent;
+        this.oneCent = _1_cent;
+        this.fiveCents = _5_cent;
+        this.tenCents = _10_cent;
+        this.twentyFiveCents = _25_cent;
     }
 
     public int getTotalCoins() {
@@ -37,36 +37,36 @@ public class ChangeDto {
         this.bill = bill;
     }
 
-    public int get_1_cent() {
-        return _1_cent;
+    public int getOneCent() {
+        return oneCent;
     }
 
-    public void set_1_cent(int _1_cent) {
-        this._1_cent = _1_cent;
+    public void setOneCent(int oneCent) {
+        this.oneCent = oneCent;
     }
 
-    public int get_5_cent() {
-        return _5_cent;
+    public int getFiveCents() {
+        return fiveCents;
     }
 
-    public void set_5_cent(int _5_cent) {
-        this._5_cent = _5_cent;
+    public void setFiveCents(int fiveCents) {
+        this.fiveCents = fiveCents;
     }
 
-    public int get_10_cent() {
-        return _10_cent;
+    public int getTenCents() {
+        return tenCents;
     }
 
-    public void set_10_cent(int _10_cent) {
-        this._10_cent = _10_cent;
+    public void setTenCents(int tenCents) {
+        this.tenCents = tenCents;
     }
 
-    public int get_25_cent() {
-        return _25_cent;
+    public int getTwentyFiveCents() {
+        return twentyFiveCents;
     }
 
-    public void set_25_cent(int _25_cent) {
-        this._25_cent = _25_cent;
+    public void setTwentyFiveCents(int twentyFiveCents) {
+        this.twentyFiveCents = twentyFiveCents;
     }
 
     @Override
@@ -74,10 +74,10 @@ public class ChangeDto {
         return new StringJoiner(", ", ChangeDto.class.getSimpleName() + "[", "]")
                 .add("totalCoins=" + totalCoins)
                 .add("bill=" + bill)
-                .add("_1_cent=" + _1_cent)
-                .add("_5_cent=" + _5_cent)
-                .add("_10_cent=" + _10_cent)
-                .add("_25_cent=" + _25_cent)
+                .add("oneCent=" + oneCent)
+                .add("fiveCents=" + fiveCents)
+                .add("tenCents=" + tenCents)
+                .add("twentyFiveCents=" + twentyFiveCents)
                 .toString();
     }
 }

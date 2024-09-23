@@ -9,10 +9,10 @@ public class CoinsDtoMapper {
 
     public CoinsDto mapFromCoinsEntity(CoinsEntity coinsEntity) {
         CoinsDto coinsDto = new CoinsDto();
-        coinsDto.set_1_cent(coinsEntity.get_1_cent());
-        coinsDto.set_5_cent(coinsEntity.get_5_cent());
-        coinsDto.set_10_cent(coinsEntity.get_10_cent());
-        coinsDto.set_25_cent(coinsEntity.get_25_cent());
+        coinsDto.setOneCent(coinsEntity.getOneCent());
+        coinsDto.setFiveCents(coinsEntity.getFiveCents());
+        coinsDto.setTenCents(coinsEntity.getTenCents());
+        coinsDto.setTwentyFiveCents(coinsEntity.getTwentyFiveCents());
         return coinsDto;
     }
 }

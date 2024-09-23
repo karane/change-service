@@ -1,5 +1,6 @@
 package com.karane.changeservice.services;
 
+import com.karane.changeservice.algorithms.CoinChangeAlgorithm;
 import com.karane.changeservice.repositories.CoinsRepository;
 import com.karane.changeservice.repositories.entities.CoinsEntity;
 import com.karane.changeservice.services.dtos.ChangeDto;
@@ -42,12 +43,11 @@ public class CoinChangeService {
 
     private void updateCoinsRepository(CoinsEntity coinsEntity, ChangeDto changeDto) {
 
-
-        coinsEntity.set_1_cent(coinsEntity.get_1_cent() - changeDto.get_1_cent());
-        coinsEntity.set_5_cent(coinsEntity.get_5_cent() - changeDto.get_5_cent());
-        coinsEntity.set_10_cent(coinsEntity.get_10_cent() - changeDto.get_10_cent());
-        coinsEntity.set_25_cent(coinsEntity.get_25_cent() - changeDto.get_25_cent());
-        coinsEntity.setTotalCoins(coinsEntity.get_1_cent() + coinsEntity.get_5_cent() + coinsEntity.get_10_cent() + coinsEntity.get_25_cent());
+        coinsEntity.setOneCent(coinsEntity.getOneCent() - changeDto.getOneCent());
+        coinsEntity.setFiveCents(coinsEntity.getFiveCents() - changeDto.getFiveCents());
+        coinsEntity.setTenCents(coinsEntity.getTenCents() - changeDto.getTenCents());
+        coinsEntity.setTwentyFiveCents(coinsEntity.getTwentyFiveCents() - changeDto.getTwentyFiveCents());
+        coinsEntity.setTotalCoins(coinsEntity.getOneCent() + coinsEntity.getFiveCents() + coinsEntity.getTenCents() + coinsEntity.getTwentyFiveCents());
 
         coinsRepository.updateCoins(coinsEntity);
     }
